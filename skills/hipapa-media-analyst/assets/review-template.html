@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hi! Papa 品牌自媒体日报复盘 — {{DATE}}</title>
+  <style>
+    /* 复盘报告样式模板 */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:-apple-system, 'Segoe UI', Roboto, sans-serif; background:#f5f7fa; color:#333; }
+    .header { background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; padding:30px 40px; }
+    .header h1 { font-size:26px; margin-bottom:8px; }
+    .header .subtitle { opacity:0.9; font-size:14px; }
+    .header .update-time { margin-top:12px; font-size:12px; opacity:0.8; }
+    .container { max-width:1200px; margin:0 auto; padding:20px 40px 40px; }
+    .section { background:#fff; border-radius:12px; padding:24px; margin:20px 0; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+    .section-title { font-size:18px; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .summary-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin:16px 0; }
+    .card { background:#f8f9fa; border-radius:10px; padding:16px; }
+    .card .label { font-size:12px; color:#888; margin-bottom:6px; }
+    .card .value { font-size:24px; font-weight:700; color:#333; }
+    .card .change { font-size:12px; margin-top:4px; }
+    .change.up { color:#52c41a; }
+    .change.down { color:#ff4d4f; }
+    .insight-box { background:#f6ffed; border-left:4px solid #52c41a; padding:14px 18px; margin:14px 0; border-radius:0 10px 10px 0; }
+    .warning-box { background:#fff7e6; border-left:4px solid #faad14; padding:14px 18px; margin:14px 0; border-radius:0 10px 10px 0; }
+    .danger-box { background:#fff2f0; border-left:4px solid #ff4d4f; padding:14px 18px; margin:14px 0; border-radius:0 10px 10px 0; }
+    .info-box { background:#e6f7ff; border-left:4px solid #1890ff; padding:14px 18px; margin:14px 0; border-radius:0 10px 10px 0; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #f0f0f0; }
+    th { background:#fafafa; font-weight:600; color:#666; font-size:12px; }
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    @media(max-width:900px){ .grid-2 { grid-template-columns:1fr; } }
+    ul { margin-left:20px; font-size:13px; line-height:2; }
+    .data-source { text-align:center; color:#aaa; font-size:11px; margin-top:30px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 Hi! Papa 品牌自媒体日报复盘</h1>
+  <div class="subtitle">行业资讯 × 后台数据 · 交叉分析与优化建议</div>
+  <div class="update-time">📅 数据日期：{{DATA_DATE}} | 🔄 复盘时间：{{UPDATE_TIME}} | 资讯来源：品牌前沿资讯日报</div>
+</div>
+
+<div class="container">
+
+  <!-- 核心发现 -->
+  <div class="section">
+    <div class="section-title">💡 今日核心发现（行业信号 × 后台数据交叉验证）</div>
+    <!-- {{CORE_FINDINGS}} -->
+  </div>
+
+  <!-- 四平台速览 -->
+  <div class="section">
+    <div class="section-title">📊 四平台昨日数据速览</div>
+    <div class="summary-cards">
+      <!-- {{PLATFORM_CARDS}} -->
+    </div>
+  </div>
+
+  <!-- 公众号复盘 -->
+  <div class="section">
+    <div class="section-title">💬 公众号复盘</div>
+    <!-- {{MP_CONTENT}} -->
+  </div>
+
+  <!-- 小红书复盘 -->
+  <div class="section">
+    <div class="section-title">📕 小红书复盘</div>
+    <!-- {{XHS_CONTENT}} -->
+  </div>
+
+  <!-- 视频号复盘 -->
+  <div class="section">
+    <div class="section-title">🎬 视频号复盘</div>
+    <!-- {{SPH_CONTENT}} -->
+  </div>
+
+  <!-- 微博复盘 -->
+  <div class="section">
+    <div class="section-title">🔴 微博复盘</div>
+    <!-- {{WB_CONTENT}} -->
+  </div>
+
+  <!-- 竞品对标 -->
+  <div class="section">
+    <div class="section-title">🎯 婴童护肤赛道 · 竞品对标分析</div>
+    <!-- {{COMPETITOR_CONTENT}} -->
+  </div>
+
+  <!-- 跨平台策略 -->
+  <div class="section">
+    <div class="section-title">🚀 跨平台策略 · 本周行动清单</div>
+    <div class="grid-2">
+      <div>
+        <h4 style="margin-bottom:8px; color:#ff4d4f; font-size:14px;">🔴 P0 · 立即执行</h4>
+        <ul><!-- {{P0_ACTIONS}} --></ul>
+      </div>
+      <div>
+        <h4 style="margin-bottom:8px; color:#faad14; font-size:14px;">🟡 P1 · 本周完成</h4>
+        <ul><!-- {{P1_ACTIONS}} --></ul>
+      </div>
+    </div>
+    <div class="info-box">
+      <strong>📌 关键监控指标（本周目标）：</strong><br>
+      <!-- {{KPI_TARGETS}} -->
+    </div>
+  </div>
+
+  <div class="data-source">
+    📡 数据来源：公众号后台 / 小红书创作服务平台 / 微博企业管理中心 / 视频号助手 / 品牌前沿资讯日报<br>
+    🛠️ 采集方式：OpenClaw 浏览器自动化采集 | 复盘时间：{{UPDATE_TIME}}
+  </div>
+
+</div>
+
+</body>
+</html>

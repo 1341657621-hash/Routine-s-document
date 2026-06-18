@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hi! Papa 品牌自媒体数据看板 — {{DATE}}</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* 看板样式模板 - 可复用 */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:-apple-system, 'Segoe UI', Roboto, sans-serif; background:#f5f7fa; color:#333; }
+    .header { background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; padding:30px 40px; }
+    .header h1 { font-size:28px; margin-bottom:8px; }
+    .header .subtitle { opacity:0.9; font-size:14px; }
+    .header .update-time { margin-top:12px; font-size:12px; opacity:0.8; }
+    .container { max-width:1400px; margin:0 auto; padding:20px 40px 40px; }
+    .section { background:#fff; border-radius:12px; padding:24px; margin:20px 0; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+    .section-title { font-size:18px; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .summary-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin:24px 0; }
+    .card { background:#f8f9fa; border-radius:12px; padding:20px; }
+    .card .label { font-size:12px; color:#888; margin-bottom:6px; }
+    .card .value { font-size:28px; font-weight:700; color:#333; }
+    .card .change { font-size:13px; margin-top:4px; }
+    .change.up { color:#52c41a; }
+    .change.down { color:#ff4d4f; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #f0f0f0; }
+    th { background:#fafafa; font-weight:600; color:#666; font-size:12px; }
+    .chart-container { position:relative; height:300px; margin:20px 0; }
+    .data-source { text-align:center; color:#aaa; font-size:11px; margin-top:30px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 Hi! Papa 品牌自媒体数据看板</h1>
+  <div class="subtitle">海龟爸爸 | 全平台运营监控中心</div>
+  <div class="update-time">📅 数据日期：{{DATA_DATE}} | 🔄 更新于：{{UPDATE_TIME}}</div>
+</div>
+
+<div class="container">
+
+  <!-- 全平台概览 -->
+  <div class="section">
+    <div class="section-title">📊 全平台核心指标</div>
+    <div class="summary-cards">
+      <!-- 公众号 -->
+      <div class="card">
+        <div class="label">💬 公众号总粉丝</div>
+        <div class="value">{{MP_FANS}}</div>
+        <div class="change {{MP_FANS_CHANGE_CLASS}}">{{MP_FANS_CHANGE}}</div>
+      </div>
+      <div class="card">
+        <div class="label">💬 昨日阅读</div>
+        <div class="value">{{MP_READ}}</div>
+        <div class="change">{{MP_SHARE}}分享</div>
+      </div>
+      <!-- 小红书 -->
+      <div class="card">
+        <div class="label">📕 小红书总粉丝</div>
+        <div class="value">{{XHS_FANS}}</div>
+        <div class="change {{XHS_FANS_CHANGE_CLASS}}">{{XHS_FANS_CHANGE}}</div>
+      </div>
+      <div class="card">
+        <div class="label">📕 笔记数</div>
+        <div class="value">{{XHS_NOTES}}</div>
+        <div class="change">篇</div>
+      </div>
+      <!-- 视频号 -->
+      <div class="card">
+        <div class="label">🎬 视频号播放</div>
+        <div class="value">{{SPH_PLAY}}</div>
+        <div class="change {{SPH_PLAY_CHANGE_CLASS}}">{{SPH_PLAY_CHANGE}}</div>
+      </div>
+      <!-- 微博 -->
+      <div class="card">
+        <div class="label">🔴 微博阅读</div>
+        <div class="value">{{WB_READ}}</div>
+        <div class="change {{WB_READ_CHANGE_CLASS}}">{{WB_READ_CHANGE}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 公众号详细 -->
+  <div class="section">
+    <div class="section-title">💬 微信公众号</div>
+    <table>
+      <tr><th>指标</th><th>数值</th><th>环比</th></tr>
+      <tr><td>总用户数</td><td><strong>{{MP_FANS}}</strong></td><td class="change {{MP_FANS_CHANGE_CLASS}}">{{MP_FANS_CHANGE}}</td></tr>
+      <tr><td>昨日阅读</td><td><strong>{{MP_READ}}</strong></td><td>—</td></tr>
+      <tr><td>昨日分享</td><td><strong>{{MP_SHARE}}</strong></td><td>—</td></tr>
+      <tr><td>新增关注</td><td><strong>{{MP_NEW}}</strong></td><td>—</td></tr>
+    </table>
+    <!-- 近期文章表格 -->
+    <h4 style="margin:16px 0 8px; color:#666; font-size:14px;">📝 近期文章</h4>
+    <table>
+      <tr><th>标题</th><th>日期</th><th>阅读</th><th>在看</th><th>点赞</th><th>收藏</th></tr>
+      <!-- {{MP_ARTICLES}} -->
+    </table>
+  </div>
+
+  <!-- 小红书详细 -->
+  <div class="section">
+    <div class="section-title">📕 小红书</div>
+    <table>
+      <tr><th>指标</th><th>数值</th></tr>
+      <tr><td>总粉丝</td><td><strong>{{XHS_FANS}}</strong></td></tr>
+      <tr><td>新增粉丝</td><td><strong class="change up">{{XHS_NEW}}</strong></td></tr>
+      <tr><td>流失粉丝</td><td><strong>{{XHS_LOST}}</strong></td></tr>
+    </table>
+    <p style="color:#888; font-size:12px; margin-top:12px;">
+      粉丝来源：首页推荐 {{XHS_SOURCE_1}} | 搜索 {{XHS_SOURCE_2}} | 个人主页 {{XHS_SOURCE_3}}
+    </p>
+  </div>
+
+  <!-- 视频号 -->
+  <div class="section">
+    <div class="section-title">🎬 视频号</div>
+    <div class="summary-cards">
+      <div class="card"><div class="label">播放</div><div class="value">{{SPH_PLAY}}</div><div class="change {{SPH_PLAY_CHANGE_CLASS}}">{{SPH_PLAY_CHANGE}}</div></div>
+      <div class="card"><div class="label">点赞</div><div class="value">{{SPH_LIKE}}</div><div class="change {{SPH_LIKE_CHANGE_CLASS}}">{{SPH_LIKE_CHANGE}}</div></div>
+      <div class="card"><div class="label">评论</div><div class="value">{{SPH_COMMENT}}</div></div>
+      <div class="card"><div class="label">分享</div><div class="value">{{SPH_SHARE}}</div><div class="change {{SPH_SHARE_CHANGE_CLASS}}">{{SPH_SHARE_CHANGE}}</div></div>
+    </div>
+  </div>
+
+  <!-- 微博 -->
+  <div class="section">
+    <div class="section-title">🔴 微博</div>
+    <table>
+      <tr><th>指标</th><th>数值</th><th>环比</th></tr>
+      <tr><td>阅读</td><td><strong>{{WB_READ}}</strong></td><td class="change {{WB_READ_CHANGE_CLASS}}">{{WB_READ_CHANGE}}</td></tr>
+      <tr><td>互动</td><td><strong>{{WB_INTERACT}}</strong></td><td class="change {{WB_INTERACT_CHANGE_CLASS}}">{{WB_INTERACT_CHANGE}}</td></tr>
+      <tr><td>页面访问</td><td><strong>{{WB_VISIT}}</strong></td><td class="change {{WB_VISIT_CHANGE_CLASS}}">{{WB_VISIT_CHANGE}}</td></tr>
+      <tr><td>总粉丝</td><td><strong>{{WB_FANS}}</strong></td><td>—</td></tr>
+    </table>
+  </div>
+
+  <!-- 趋势图 -->
+  <div class="section">
+    <div class="section-title">📈 数据趋势</div>
+    <div class="chart-container">
+      <canvas id="trendChart"></canvas>
+    </div>
+  </div>
+
+  <div class="data-source">
+    📡 数据来源：公众号后台 / 小红书创作服务平台 / 微博企业管理中心 / 视频号助手<br>
+    🛠️ 采集方式：OpenClaw 浏览器自动化采集 | 更新时间：{{UPDATE_TIME}}
+  </div>
+
+</div>
+
+<script>
+// 趋势图数据 - 需要填充
+const ctx = document.getElementById('trendChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['{{TREND_LABELS}}'],
+    datasets: [{
+      label: '曝光趋势',
+      data: [{{TREND_DATA}}],
+      borderColor: 'rgba(255, 36, 66, 1)',
+      backgroundColor: 'rgba(255, 36, 66, 0.1)',
+      fill: true,
+      tension: 0.4
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#f0f0f0' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

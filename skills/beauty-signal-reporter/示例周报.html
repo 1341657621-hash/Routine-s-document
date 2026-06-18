@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beauty Signal 小红书数据周报 — 2026.05.26-06.01</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .page-break { page-break-before: always; }
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { 
+      font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; 
+      background: #fff; 
+      color: #1a1a1a; 
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+    .header { 
+      background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%); 
+      color: #fff; 
+      padding: 32px 40px; 
+      border-radius: 16px;
+      margin-bottom: 28px;
+    }
+    .header .brand { font-size: 14px; opacity: 0.85; letter-spacing: 1px; text-transform: uppercase; }
+    .header h1 { font-size: 26px; margin: 8px 0 4px; font-weight: 700; }
+    .header .subtitle { font-size: 14px; opacity: 0.85; }
+    .header .meta { margin-top: 16px; font-size: 12px; opacity: 0.75; display: flex; gap: 20px; }
+    .section { 
+      background: #fff; 
+      border-radius: 12px; 
+      padding: 24px; 
+      margin: 20px 0; 
+      border: 1px solid #f0f0f0;
+    }
+    .section-title { 
+      font-size: 17px; 
+      font-weight: 600; 
+      margin-bottom: 16px; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px;
+      color: #C44569;
+    }
+    .section-title .icon { font-size: 20px; }
+    .summary-cards { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 14px; 
+      margin: 16px 0; 
+    }
+    .card { 
+      background: #fafafa; 
+      border-radius: 12px; 
+      padding: 18px;
+      text-align: center;
+    }
+    .card .label { 
+      font-size: 11px; 
+      color: #888; 
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card .value { 
+      font-size: 26px; 
+      font-weight: 700; 
+      color: #1a1a1a; 
+    }
+    .card .change { 
+      font-size: 12px; 
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .change.up { color: #52c41a; }
+    .change.down { color: #ff4d4f; }
+    .change.neutral { color: #999; }
+    .status { 
+      display: inline-block; 
+      padding: 3px 10px; 
+      border-radius: 20px; 
+      font-size: 11px; 
+      font-weight: 600;
+    }
+    .status.green { background: #f6ffed; color: #52c41a; }
+    .status.yellow { background: #fffbe6; color: #faad14; }
+    .status.red { background: #fff2f0; color: #ff4d4f; }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: 13px;
+      margin: 12px 0;
+    }
+    th, td { 
+      padding: 10px 12px; 
+      text-align: left; 
+      border-bottom: 1px solid #f0f0f0; 
+    }
+    th { 
+      background: #fafafa; 
+      font-weight: 600; 
+      color: #666; 
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    tr:hover td { background: #fafafa; }
+    .rank { 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center;
+      width: 22px; 
+      height: 22px; 
+      border-radius: 6px; 
+      font-size: 11px; 
+      font-weight: 700;
+    }
+    .rank.top { background: #C44569; color: #fff; }
+    .rank.mid { background: #ffd93d; color: #1a1a1a; }
+    .rank.low { background: #f0f0f0; color: #999; }
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .chart-box {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .chart-box .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 12px;
+    }
+    .chart-container { 
+      position: relative; 
+      height: 220px; 
+    }
+    .insight { 
+      background: #fff7e6; 
+      border-left: 3px solid #faad14; 
+      padding: 14px 18px; 
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+      font-size: 13px;
+    }
+    .insight.green { background: #f6ffed; border-left-color: #52c41a; }
+    .insight.red { background: #fff2f0; border-left-color: #ff4d4f; }
+    .insight .label { 
+      font-weight: 600; 
+      font-size: 11px; 
+      color: #faad14; 
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .insight.green .label { color: #52c41a; }
+    .insight.red .label { color: #ff4d4f; }
+    .competitor-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .competitor-card {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    .competitor-card .name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .competitor-card .metric {
+      font-size: 12px;
+      color: #888;
+      margin: 4px 0;
+    }
+    .competitor-card .metric strong {
+      color: #1a1a1a;
+      font-size: 16px;
+    }
+    .action-list {
+      list-style: none;
+      margin: 12px 0;
+    }
+    .action-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 13px;
+    }
+    .action-list .priority {
+      min-width: 36px;
+      height: 20px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .priority.p0 { background: #ff4d4f; color: #fff; }
+    .priority.p1 { background: #faad14; color: #fff; }
+    .priority.p2 { background: #bfbfbf; color: #fff; }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #f0f0f0;
+      text-align: center;
+      font-size: 11px;
+      color: #bbb;
+    }
+    .page-break { 
+      border-top: 2px dashed #eee;
+      margin: 30px 0;
+      padding-top: 10px;
+    }
+    .badge { 
+      display: inline-block; 
+      padding: 2px 8px; 
+      border-radius: 4px; 
+      font-size: 11px; 
+      font-weight: 600;
+      margin-left: 6px;
+    }
+    .badge.hot { background: #fff2f0; color: #ff4d4f; }
+    .badge.new { background: #e6f7ff; color: #1890ff; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">Beauty Signal · 小红书账号</div>
+  <h1>📊 数据周报</h1>
+  <div class="subtitle">指导选题优化与内容策略调整</div>
+  <div class="meta">
+    <span>📅 统计周期：2026.05.26 - 06.01</span>
+    <span>🔄 报告生成：2026-06-02</span>
+    <span>📌 第 22 周</span>
+  </div>
+</div>
+
+<!-- ======== PART 1: 账号数据总览 ======== -->
+<div class="section">
+  <div class="section-title"><span class="icon">📈</span> Part 1 · 本周账号数据总览</div>
+  
+  <div class="summary-cards">
+    <div class="card">
+      <div class="label">总粉丝</div>
+      <div class="value">12.8K</div>
+      <div class="change up">↑ 156 (+1.2%)</div>
+    </div>
+    <div class="card">
+      <div class="label">本周新增粉丝</div>
+      <div class="value">156</div>
+      <div class="change up">↑ 23% 环比上周</div>
+    </div>
+    <div class="card">
+      <div class="label">本周观看量</div>
+      <div class="value">48.2K</div>
+      <div class="change up">↑ 18% 环比上周</div>
+    </div>
+    <div class="card">
+      <div class="label">互动率</div>
+      <div class="value">4.8%</div>
+      <div class="change up">↑ 0.6pp 环比上周</div>
+    </div>
+  </div>
+  
+  <div class="summary-cards">
+    <div class="card">
+      <div class="label">本周点赞</div>
+      <div class="value">1,847</div>
+      <div class="change neutral">369 / 篇</div>
+    </div>
+    <div class="card">
+      <div class="label">本周收藏</div>
+      <div class="value">892</div>
+      <div class="change neutral">178 / 篇</div>
+    </div>
+    <div class="card">
+      <div class="label">本周评论</div>
+      <div class="value">476</div>
+      <div class="change neutral">95 / 篇</div>
+    </div>
+    <div class="card">
+      <div class="label">发布笔记数</div>
+      <div class="value">5</div>
+      <div class="change neutral">与上周持平</div>
+    </div>
+  </div>
+
+  <div class="insight green">
+    <div class="label">💡 核心发现</div>
+    <div>本周互动率 <strong>4.8%</strong> 超越美妆行业均值（3.2%），收藏率（1.85%）表现尤为突出，说明「教程类」和「产品种草」内容对用户决策影响较强。新增粉丝中 <strong>62% 来自搜索</strong>，SEO 优化见效。</div>
+  </div>
+</div>
+
+<!-- ======== PART 2: 内容表现分析 ======== -->
+<div class="section page-break">
+  <div class="section-title"><span class="icon">📝</span> Part 2 · 内容表现分析</div>
+  
+  <p style="font-size:13px;color:#888;margin-bottom:12px;">本周发布 5 篇笔记，以下为核心内容表现：</p>
+  
+  <table>
+    <tr>
+      <th style="width:40px;">排名</th>
+      <th>笔记标题</th>
+      <th>类型</th>
+      <th>发布时间</th>
+      <th>观看</th>
+      <th>点赞</th>
+      <th>收藏</th>
+      <th>互动率</th>
+    </tr>
+    <tr>
+      <td><span class="rank top">1</span></td>
+      <td>黄皮逆袭！这3支口红让我白了一个度<span class="badge hot">爆</span></td>
+      <td><span class="status green">种草</span></td>
+      <td>05.28 20:30</td>
+      <td><strong>18.5K</strong></td>
+      <td>1,204</td>
+      <td>678</td>
+      <td><strong>10.2%</strong></td>
+    </tr>
+    <tr>
+      <td><span class="rank top">2</span></td>
+      <td>早八人5分钟伪素颜妆 | 新手跟练版</td>
+      <td><span class="status green">教程</span></td>
+      <td>05.30 07:15</td>
+      <td><strong>15.2K</strong></td>
+      <td>856</td>
+      <td>412</td>
+      <td><strong>8.3%</strong></td>
+    </tr>
+    <tr>
+      <td><span class="rank top">3</span></td>
+      <td>618开箱！我收到了什么神仙礼盒<span class="badge new">新</span></td>
+      <td><span class="status yellow">开箱</span></td>
+      <td>05.31 14:00</td>
+      <td><strong>8.7K</strong></td>
+      <td>523</td>
+      <td>198</td>
+      <td><strong>8.3%</strong></td>
+    </tr>
+    <tr>
+      <td><span class="rank low">4</span></td>
+      <td>我的梳妆台大公开</td>
+      <td><span class="status yellow">日常</span></td>
+      <td>05.27 21:00</td>
+      <td><strong>3.2K</strong></td>
+      <td>142</td>
+      <td>87</td>
+      <td><strong>7.2%</strong></td>
+    </tr>
+    <tr>
+      <td><span class="rank low">5</span></td>
+      <td>关于我皮肤变好的秘密...</td>
+      <td><span class="status red">护肤</span></td>
+      <td>05.26 19:45</td>
+      <td><strong>2.6K</strong></td>
+      <td>122</td>
+      <td>67</td>
+      <td><strong>7.3%</strong></td>
+    </tr>
+  </table>
+
+  <div class="insight">
+    <div class="label">🔍 内容洞察</div>
+    <div><strong>反直觉发现：</strong>「早八妆」教程在 <strong>7:15 早间发布</strong>，互动率反而高于晚间发布的开箱内容。美妆教程类内容在通勤时段（7-9点）触达效率可能更高——用户正在地铁/公交车上刷手机找"今天化什么"。建议测试更多早间时段发布。</div>
+  </div>
+  
+  <div class="chart-row">
+    <div class="chart-box">
+      <div class="chart-title">内容类型分布</div>
+      <div class="chart-container"><canvas id="typeChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">发布时间 vs 平均互动</div>
+      <div class="chart-container"><canvas id="timeChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== PART 3: 用户画像变化 ======== -->
+<div class="section page-break">
+  <div class="section-title"><span class="icon">👥</span> Part 3 · 用户画像变化</div>
+  
+  <div class="chart-row">
+    <div class="chart-box">
+      <div class="chart-title">粉丝性别分布</div>
+      <div class="chart-container"><canvas id="genderChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">粉丝年龄分布</div>
+      <div class="chart-container"><canvas id="ageChart"></canvas></div>
+    </div>
+  </div>
+  
+  <table>
+    <tr>
+      <th>画像维度</th>
+      <th>本周数据</th>
+      <th>上周对比</th>
+      <th>变化趋势</th>
+    </tr>
+    <tr>
+      <td>女性占比</td>
+      <td><strong>94.2%</strong></td>
+      <td>93.8%</td>
+      <td class="change up">↑ +0.4pp</td>
+    </tr>
+    <tr>
+      <td>18-24岁占比</td>
+      <td><strong>38.5%</strong></td>
+      <td>35.2%</td>
+      <td class="change up">↑ +3.3pp ⚠️</td>
+    </tr>
+    <tr>
+      <td>25-34岁占比</td>
+      <td><strong>45.1%</strong></td>
+      <td>47.3%</td>
+      <td class="change down">↓ -2.2pp</td>
+    </tr>
+    <tr>
+      <td>Top 1 城市</td>
+      <td><strong>上海</strong></td>
+      <td>上海</td>
+      <td class="change neutral">持平</td>
+    </tr>
+    <tr>
+      <td>新增粉丝来源（搜索）</td>
+      <td><strong>62%</strong></td>
+      <td>48%</td>
+      <td class="change up">↑ +14pp 🚀</td>
+    </tr>
+  </table>
+  
+  <div class="insight green">
+    <div class="label">💡 用户洞察</div>
+    <div>18-24岁占比快速上升至 <strong>38.5%</strong>（+3.3pp），结合搜索来源占比激增，推测是「口红试色」笔记被搜索推荐拉新。建议针对年轻群体增加「学生党平价好物」和「新手入门」类内容，同时保持 25-34 岁核心人群的「品质升级」内容。</div>
+  </div>
+</div>
+
+<!-- ======== PART 4: 竞品对标 ======== -->
+<div class="section page-break">
+  <div class="section-title"><span class="icon">🏆</span> Part 4 · 竞品对标（同类美妆账号）</div>
+  
+  <div class="competitor-grid">
+    <div class="competitor-card">
+      <div class="name">@美妆达人CC</div>
+      <div class="metric">粉丝 <strong>45.2K</strong></div>
+      <div class="metric">互动率 <strong>2.8%</strong></div>
+      <div class="metric">本周爆文 <strong>1</strong></div>
+    </div>
+    <div class="competitor-card" style="border:2px solid #FF6B9D;">
+      <div class="name" style="color:#C44569;">🏷️ Beauty Signal</div>
+      <div class="metric">粉丝 <strong>12.8K</strong></div>
+      <div class="metric">互动率 <strong>4.8%</strong></div>
+      <div class="metric">本周爆文 <strong>3</strong></div>
+    </div>
+    <div class="competitor-card">
+      <div class="name">@成分党小A</div>
+      <div class="metric">粉丝 <strong>28.6K</strong></div>
+      <div class="metric">互动率 <strong>3.5%</strong></div>
+      <div class="metric">本周爆文 <strong>2</strong></div>
+    </div>
+  </div>
+  
+  <table>
+    <tr>
+      <th>账号</th>
+      <th>本周热门内容</th>
+      <th>可借鉴方向</th>
+    </tr>
+    <tr>
+      <td><strong>@美妆达人CC</strong></td>
+      <td>「大牌平替测评」系列，单篇 32K 观看</td>
+      <td>「平替」选题搜索量大，可尝试同价位产品横评</td>
+    </tr>
+    <tr>
+      <td><strong>@成分党小A</strong></td>
+      <td>「A醇耐受期记录」vlog 形式，评论区互动极高</td>
+      <td>护肤过程记录 + 时间线可视化，增强真实感</td>
+    </tr>
+    <tr>
+      <td><strong>@学生党美妆</strong></td>
+      <td>「50元搞定全妆挑战」，互动率 6.2%</td>
+      <td>价格锚点 + 挑战形式，刺激收藏和转发</td>
+    </tr>
+  </table>
+  
+  <div class="insight">
+    <div class="label">🔍 竞品洞察</div>
+    <div>Beauty Signal 互动率（4.8%）显著高于对标账号，但粉丝量级差距大。核心优势是 <strong>高转化效率</strong>——每篇笔记能带来更多互动和收藏。下一步应重点解决「量」的问题：参考 @学生党美妆 的「挑战类」选题，利用高互动率放大涨粉效果。</div>
+  </div>
+</div>
+
+<!-- ======== PART 5: 下周选题建议 ======== -->
+<div class="section page-break">
+  <div class="section-title"><span class="icon">🎯</span> Part 5 · 下周选题建议</div>
+  
+  <p style="font-size:13px;color:#888;margin-bottom:16px;">基于本周数据反馈，推荐以下选题方向：</p>
+  
+  <ul class="action-list">
+    <li>
+      <span class="priority p0">P0</span>
+      <div>
+        <strong>「黄皮天菜」系列第二弹：腮红/眼影篇</strong><br>
+        <span style="color:#888;font-size:12px;">延续上周爆文基因，系列化运营建立「黄皮专家」人设 | 预估互动率 8-10%</span>
+      </div>
+    </li>
+    <li>
+      <span class="priority p0">P0</span>
+      <div>
+        <strong>「早八人」系列：一周通勤妆不重样（5天跟练）</strong><br>
+        <span style="color:#888;font-size:12px;">验证早间时段高互动假设，系列发布覆盖整周 | 预估互动率 7-9%</span>
+      </div>
+    </li>
+    <li>
+      <span class="priority p1">P1</span>
+      <div>
+        <strong>「学生党第一套化妆品」保姆级选购指南</strong><br>
+        <span style="color:#888;font-size:12px;">针对新增 18-24 岁粉丝，高收藏预期 | 预估互动率 6-8%</span>
+      </div>
+    </li>
+    <li>
+      <span class="priority p1">P1</span>
+      <div>
+        <strong>「618战利品红黑榜」真实使用反馈</strong><br>
+        <span style="color:#888;font-size:12px;">踩坑内容天然高互动，评论区引流 | 预估互动率 5-7%</span>
+      </div>
+    </li>
+    <li>
+      <span class="priority p2">P2</span>
+      <div>
+        <strong>「我的美妆蛋多久换一次？化妆品保质期自查表」</strong><br>
+        <span style="color:#888;font-size:12px;">知识科普类，长尾搜索流量 | 预估互动率 4-6%</span>
+      </div>
+    </li>
+  </ul>
+  
+  <div class="insight green">
+    <div class="label">💡 选题策略建议</div>
+    <div>本周数据验证了两个高潜方向：（1）<strong>肤色适配类</strong>内容（黄皮/白皮/橄榄皮）搜索流量大、收藏率高；（2）<strong>早间场景</strong>触达效率优于晚间。建议下周内容矩阵围绕这两个锚点展开，同时用「学生党」选题承接新增的年轻化流量。</div>
+  </div>
+  
+  <div style="background:#fafafa;border-radius:12px;padding:16px;margin-top:16px;">
+    <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#666;">📋 下周执行清单</div>
+    <ul class="action-list" style="margin:0;">
+      <li style="border:none;padding:6px 0;">
+        <span class="priority p0">P0</span>
+        <span>周三前完成「黄皮腮红」脚本拍摄，周四 20:00 发布</span>
+      </li>
+      <li style="border:none;padding:6px 0;">
+        <span class="priority p1">P1</span>
+        <span>测试早间 7:30 发布时段，连续发布 2 篇验证效果</span>
+      </li>
+      <li style="border:none;padding:6px 0;">
+        <span class="priority p2">P2</span>
+        <span>整理 618 已购产品清单，准备红黑榜素材</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== FOOTER ======== -->
+<div class="footer">
+  <div>Beauty Signal · 小红书数据周报 · 仅供内部参考</div>
+  <div style="margin-top:4px;">数据来源：小红书创作服务平台 | 竞品数据：公开渠道采集 | 示例报告，数据为模拟值</div>
+</div>
+
+<!-- ======== CHART SCRIPTS ======== -->
+<script>
+new Chart(document.getElementById('typeChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['种草', '教程', '开箱', '日常', '护肤'],
+    datasets: [{
+      data: [40, 30, 15, 10, 5],
+      backgroundColor: ['#FF6B9D', '#C44569', '#ffd93d', '#6bcb77', '#4d96ff']
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'right', labels: { font: { size: 11 } } } }
+  }
+});
+
+new Chart(document.getElementById('timeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['7:00', '14:00', '19:00', '20:30', '21:00'],
+    datasets: [{
+      label: '平均互动率(%)',
+      data: [8.3, 8.3, 7.3, 10.2, 7.2],
+      backgroundColor: '#FF6B9D'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+
+new Chart(document.getElementById('genderChart'), {
+  type: 'pie',
+  data: {
+    labels: ['女性', '男性', '未知'],
+    datasets: [{
+      data: [94.2, 4.1, 1.7],
+      backgroundColor: ['#FF6B9D', '#4d96ff', '#ddd']
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'right', labels: { font: { size: 11 } } } }
+  }
+});
+
+new Chart(document.getElementById('ageChart'), {
+  type: 'bar',
+  data: {
+    labels: ['<18', '18-24', '25-34', '35-44', '>44'],
+    datasets: [{
+      label: '占比(%)',
+      data: [8.3, 38.5, 45.1, 6.2, 1.9],
+      backgroundColor: '#C44569'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+</script>
+
+</body>
+</html>
