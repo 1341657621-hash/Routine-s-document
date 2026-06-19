@@ -16,7 +16,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const LOCAL_WORKSPACE = process.env.LOCAL_WORKSPACE || 'C:\\Users\\Routi\\.kimi_openclaw\\workspace';
-const REPO_PATH = process.env.REPO_PATH || __dirname;
+const REPO_PATH = process.env.REPO_PATH || path.join(__dirname, '..');
 
 // 定义同步映射规则
 const SYNC_MAP = [
@@ -34,6 +34,11 @@ const SYNC_MAP = [
   { src: 'skills/kimi-webbridge-desktop/SKILL.md',                     dest: 'skills/kimi-webbridge-desktop/SKILL.md' },
   { src: 'skills/kimi-webbridge-desktop/references/',                  dest: 'skills/kimi-webbridge-desktop/references/' },
   { src: 'skills/kimi-webbridge-desktop/scripts/',                     dest: 'skills/kimi-webbridge-desktop/scripts/' },
+  // 新增 Skills（2026-06-19）
+  { src: 'skills/kimi-desktop-gateway-policy/SKILL.md',               dest: 'skills/kimi-desktop-gateway-policy/SKILL.md' },
+  { src: 'skills/kimiim/SKILL.md',                                    dest: 'skills/kimiim/SKILL.md' },
+  { src: 'skills/time-awareness/SKILL.md',                            dest: 'skills/time-awareness/SKILL.md' },
+  { src: 'skills/worker-safety/SKILL.md',                             dest: 'skills/worker-safety/SKILL.md' },
 
   // Projects
   { src: 'projects/business-leads/execution-plan.md',                  dest: 'projects/business-leads/execution-plan.md' },
@@ -87,6 +92,10 @@ function copyDir(srcDir, destDir) {
   let count = 0;
   const entries = fs.readdirSync(srcDir, { withFileTypes: true });
   for (const entry of entries) {
+    // 跳过 .git 目录和隐藏文件
+    if (entry.name.startsWith('.') && entry.isDirectory()) continue;
+    if (entry.name === '.git') continue;
+    
     const srcPath = path.join(srcDir, entry.name);
     const destPath = path.join(destDir, entry.name);
     if (entry.isDirectory()) {
