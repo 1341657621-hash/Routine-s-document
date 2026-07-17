@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>品牌前沿资讯看板 | 海龟爸爸</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f5f5f7;color:#1d1d1f;line-height:1.5;-webkit-font-smoothing:antialiased}
+.container{max-width:960px;margin:0 auto;padding:16px}
+
+/* Header */
+.header{background:#1e40af;color:#fff;padding:28px 20px;border-radius:12px;margin-bottom:16px}
+.header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.header .sub{font-size:13px;opacity:.85}
+.header .time{font-size:11px;opacity:.7;margin-top:10px}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+@media(min-width:768px){.stats{grid-template-columns:repeat(5,1fr)}}
+.stat{background:#fff;border:1px solid #e5e5e7;border-radius:10px;padding:14px;text-align:center}
+.stat .num{font-size:26px;font-weight:700;color:#1e40af;line-height:1}
+.stat .num.g{color:#059669}.stat .num.o{color:#d97706}.stat .num.r{color:#dc2626}
+.stat .lbl{font-size:12px;color:#8e8e93;margin-top:4px}
+
+/* Section */
+.section{background:#fff;border:1px solid #e5e5e7;border-radius:12px;padding:20px;margin-bottom:16px}
+.sec-title{font-size:17px;font-weight:700;color:#1d1d1f;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #f0f0f2;display:flex;align-items:center;gap:8px}
+.sec-title .ic{font-size:22px}
+
+/* Judgment Cards */
+.j-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
+@media(min-width:768px){.j-grid{grid-template-columns:repeat(2,1fr)}}
+.j-card{border:1px solid #e5e5e7;border-radius:10px;padding:16px;background:#fff}
+.j-card.sun{border-left:4px solid #f59e0b}.j-card.teen{border-left:4px solid #3b82f6}
+.j-card.comp{border-left:4px solid #10b981}.j-card.tech{border-left:4px solid #8b5cf6}
+.j-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.j-ic{font-size:20px}.j-t{font-size:14px;font-weight:700}
+.j-d{font-size:12px;color:#4b5563;margin-bottom:6px}
+.j-d .up{color:#059669;font-weight:700}.j-d .down{color:#dc2626;font-weight:700}
+.j-det{font-size:12px;color:#6b7280;line-height:1.6}
+
+/* Implication Cards */
+.i-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:768px){.i-grid{grid-template-columns:repeat(3,1fr)}}
+.i-card{border:1px solid #e5e5e7;border-radius:10px;overflow:hidden}
+.i-card.a{border-top:3px solid #059669}.i-card.r{border-top:3px solid #dc2626}.i-card.c{border-top:3px solid #d97706}
+.i-h{padding:10px 14px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;background:#fafafa}
+.i-b{padding:10px 14px}
+.i-it{font-size:12px;color:#4b5563;padding:6px 0;border-bottom:1px solid #f0f0f2;line-height:1.5}
+.i-it:last-child{border-bottom:none}
+
+/* Category Nav */
+.cat-nav{display:flex;gap:8px;overflow-x:auto;padding:4px 0;margin-bottom:16px;scrollbar-width:none}
+.cat-nav::-webkit-scrollbar{display:none}
+.cat-btn{flex-shrink:0;padding:8px 16px;border:1px solid #e5e5e7;border-radius:20px;background:#fff;font-size:12px;font-weight:600;color:#6b7280;cursor:pointer;transition:all .2s;white-space:nowrap}
+.cat-btn:hover,.cat-btn.a{background:#1e40af;color:#fff;border-color:#1e40af}
+
+/* Panel */
+.panel{display:none}.panel.a{display:block}
+
+/* Category Cards */
+.cc{border:1px solid #e5e5e7;border-radius:10px;padding:16px;margin-bottom:12px;background:#fff}
+.cc:last-child{margin-bottom:0}
+.cc.b{border-left:3px solid #3b82f6}.cc.g{border-left:3px solid #10b981}
+.cc.o{border-left:3px solid #f59e0b}.cc.r{border-left:3px solid #ef4444}.cc.p{border-left:3px solid #8b5cf6}
+.cc h3{font-size:14px;font-weight:700;color:#1d1d1f;margin-bottom:8px}
+.cc p{font-size:12px;color:#4b5563;line-height:1.6;margin-bottom:6px}
+.cc p strong{color:#1d1d1f}
+.cc .src{font-size:10px;color:#8e8e93;margin-top:8px;padding-top:6px;border-top:1px solid #f0f0f2}
+
+/* Data Table */
+.data-table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+.data-table th{background:#f9fafb;padding:8px 10px;text-align:left;font-weight:700;color:#374151;border-bottom:2px solid #e5e5e7}
+.data-table td{padding:8px 10px;border-bottom:1px solid #f0f0f2;color:#4b5563}
+.data-table tr:hover td{background:#f9fafb}
+
+/* Simple List */
+.data-list{font-size:12px;color:#4b5563;line-height:1.8;margin:8px 0;padding-left:16px}
+.data-list li{margin-bottom:4px}
+
+/* Timeline */
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:#e5e5e7}
+.tl-item{position:relative;margin-bottom:14px}
+.tl-item::before{content:"";position:absolute;left:-21px;top:6px;width:10px;height:10px;border-radius:50%;background:#1e40af;border:2px solid #fff;box-shadow:0 0 0 1px #e5e5e7}
+.tl-card{border:1px solid #e5e5e7;border-radius:10px;padding:14px;background:#fff}
+.tl-date{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.tl-date .dt{font-size:12px;font-weight:700;color:#1e40af}
+.tl-tag{font-size:10px;padding:2px 6px;border-radius:3px;background:#dbeafe;color:#1e40af;font-weight:600}
+.tl-title{font-size:13px;font-weight:700;color:#1d1d1f;margin-bottom:4px}
+.tl-summary{font-size:12px;color:#4b5563;line-height:1.5}
+.tl-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.tl-tags .tg{font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600}
+.tg-ind{background:#dbeafe;color:#1e40af}.tg-comp{background:#d1fae5;color:#065f46}
+.tg-mark{background:#fef3c7;color:#92400e}.tg-end{background:#fce7f3;color:#be185d}
+.tg-plat{background:#e0e7ff;color:#4338ca}.tg-pol{background:#f3e8ff;color:#7c3aed}
+.tg-cap{background:#cffafe;color:#0e7490}.tg-ovs{background:#dbeafe;color:#1e40af}
+
+/* Footer */
+.footer{text-align:center;padding:20px;font-size:11px;color:#8e8e93;line-height:1.8}
+
+@media(max-width:768px){.container{padding:12px}.section{padding:14px}.header{padding:20px 16px}.header h1{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+<h1>品牌前沿资讯看板</h1>
+<div class="sub">海龟爸爸品牌监测 · 行业动态 · 竞品情报 · 营销趋势</div>
+<div class="time">更新周期：2026年4月-7月 | 覆盖：防晒/青少年护肤/婴童护肤/无水美妆/情绪美容/AI防晒/出海</div>
+</div>
+
+<!-- Stats -->
+<div class="stats">
+<div class="stat"><div class="num g">9</div><div class="lbl">大分类</div></div>
+<div class="stat"><div class="num">20+</div><div class="lbl">重点事件</div></div>
+<div class="stat"><div class="num o">15</div><div class="lbl">品牌动态</div></div>
+<div class="stat"><div class="num r">8</div><div class="lbl">政策监管</div></div>
+<div class="stat"><div class="num">5</div><div class="lbl">资本事件</div></div>
+</div>
+
+<!-- 核心洞察 -->
+<div class="section">
+<div class="sec-title"><span class="ic">🔍</span>核心洞察与启示分析</div>
+<div class="j-grid">
+<div class="j-card sun">
+<div class="j-h"><span class="j-ic">☀️</span><span class="j-t">防晒结构性分化</span></div>
+<div class="j-d">Q1 28.47亿 <span class="down">-9.5%</span> | 喷雾逆势 <span class="up">+40.6%</span></div>
+<div class="j-det">儿童防晒+40.2%领跑，运动服+74.1%、女装+64%为核心增长极</div>
+</div>
+<div class="j-card teen">
+<div class="j-h"><span class="j-ic">🧑‍🎓</span><span class="j-t">青少年护肤窗口期</span></div>
+<div class="j-d">声量 <span class="up">+445%</span> | 05后 <span class="up">5,691万人</span></div>
+<div class="j-det">"以酶抗痘"替代刷酸成趋势，海龟爸爸已抢占"标准制定者"身份</div>
+</div>
+<div class="j-card comp">
+<div class="j-h"><span class="j-ic">🎯</span><span class="j-t">竞品三路并进</span></div>
+<div class="j-d">6大品牌 | 国际大牌/运动服饰/成分党</div>
+<div class="j-det">安热沙/MISTINE/贝德美/润本/袋鼠妈妈/一页快速起量</div>
+</div>
+<div class="j-card tech">
+<div class="j-h"><span class="j-ic">🤖</span><span class="j-t">AI成为防晒核心</span></div>
+<div class="j-d">MISTINE/资生堂 | 线粒体抗光损</div>
+<div class="j-det">AI从营销工具升级为产品研发核心驱动力，窗口期有限</div>
+</div>
+</div>
+<div class="i-grid">
+<div class="i-card a">
+<div class="i-h"><span>🎯</span> 行动启示</div>
+<div class="i-b">
+<div class="i-it">防晒喷雾Q3前布局，卡位家庭外出/军训/海边</div>
+<div class="i-it">"羲和实验室"+AI叙事，与竞品形成差异化</div>
+<div class="i-it">青少年护肤"标准=安全=有效"心智占领</div>
+</div>
+</div>
+<div class="i-card r">
+<div class="i-h"><span>⚠️</span> 风险预警</div>
+<div class="i-b">
+<div class="i-it">安热沙/MISTINE国际大牌+AI技术双重挤压</div>
+<div class="i-it">微博蓝V 7月15日到期，需提前续费决策</div>
+<div class="i-it">青少年护肤窗口期缩小，竞品纷纷入局</div>
+</div>
+</div>
+<div class="i-card c">
+<div class="i-h"><span>💡</span> 机会窗口</div>
+<div class="i-b">
+<div class="i-it">婴童赛道体育明星代言空白，可先发占位</div>
+<div class="i-it">"亚洲第一儿童防晒"出海东南亚准备</div>
+<div class="i-it">618/开学季节点营销卡位家庭备货</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 分类导航 -->
+<div class="cat-nav">
+<button class="cat-btn a" onclick="showView('industry')">行业动态</button>
+<button class="cat-btn" onclick="showView('competitor')">竞品动态</button>
+<button class="cat-btn" onclick="showView('case')">营销案例</button>
+<button class="cat-btn" onclick="showView('celebrity')">艺人代言</button>
+<button class="cat-btn" onclick="showView('platform')">平台趋势</button>
+<button class="cat-btn" onclick="showView('policy')">政策监管</button>
+<button class="cat-btn" onclick="showView('capital')">资本市场</button>
+<button class="cat-btn" onclick="showView('overseas')">海外市场</button>
+</div>
+
+<!-- 行业动态面板 -->
+<div id="industry-view" class="panel a">
+<div class="cc b">
+<h3>防晒赛道：2026上半年结构性分化，喷雾逆势+40.6%成第二曲线</h3>
+<p>2026年Q1主流电商防晒销售额<strong>28.47亿元</strong>（同比<span class="down">-9.5%</span>），结构性分化显著：防晒喷雾逆势增长<strong>40.6%</strong>（销售额1.05亿元），销量同比+48.4%，成为第二增长曲线。儿童防晒+40.2%领跑，运动服+74.1%、女装+64%为核心增长极。4月防晒电商总盘同比+19%突破40亿元。100-200元价格带占销售额66%是利润核心。</p>
+<p><strong>青眼情报《2026防晒趋势白皮书》</strong>：全球防晒化妆品市场2024年153.65亿美元→2030年212.28亿美元；中国防晒服市场2026年预计958亿元。儿童防晒CAGR约18%，养肤型防晒CAGR约25%。防晒棒在韩国份额突破6%，质润/戴可思推出防晒棒新品。</p>
+<p><strong>竞品动作</strong>：安热沙（资生堂）3月推出「全新蓝宝瓶」儿童防晒；MISTINE第七代搭载AI线粒体抗光损科技；海龟爸爸2025年GMV 8.2亿，获欧睿认证"亚洲第一婴童防晒品牌"。</p>
+<div class="src">来源：魔镜洞察 / 任拓 / 青眼情报 / 2026.Q1-4月</div>
+</div>
+<div class="cc g">
+<h3>青少年护肤：05后消费621亿元，话题声量+445%</h3>
+<p>05后约5,691万人，消费链路从"搜索先行"→"内容种草→验证→下单"。信任机制从"信达人"转向"信真实反馈"。"以酶抗痘"比刷酸更温和成趋势。</p>
+<p>海龟爸爸小蓝瓶SGS检测28天痘痘-54.83%、闭口-67.96%，牵头制定全国首个青少年祛痘团标，以"标准制定者"身份入局。椿草/玉泽/悦芙媞/袋鼠妈妈纷纷入局，窗口期正在缩小。</p>
+<div class="src">来源：青眼情报 / 海龟爸爸SGS报告 / 2026.05</div>
+</div>
+<div class="cc o">
+<h3>婴童抗敏感：医研共创 + 竞品差异化布局加速</h3>
+<p>婴童抗敏感需求上升，成分温和化成为标配。安唯伊获CIC双认证，以胎脂科技占据高端市场。戴可思3.74亿领跑天猫婴童护肤（7.8%），联合第三方实验室测评。</p>
+<p>海龟爸爸建立亚洲首个少儿皮肤数据库，三大核心系列（抗光损、抗敏感、抗油痘）覆盖全周期。</p>
+<div class="src">来源：CIC灼识 / 戴可思 / 海龟爸爸品牌发布</div>
+</div>
+<div class="cc p">
+<h3>无水美妆：65.8亿→205.63亿元（CAGR 46%），"高认知低渗透"落差70%</h3>
+<p>"高认知低渗透"落差达70个百分点，市场教育空间巨大，从导入期迈向成长期。可借助"儿童无水美妆"概念拓展至成人/青少年美妆领域。</p>
+<div class="src">来源：青眼情报 / 美妆头条</div>
+</div>
+<div class="cc r">
+<h3>情绪美容：首部标准发布，β-内啡肽/皮质醇成布局重点</h3>
+<p>"长寿护肤"成2026顶流热词：兰蔻菁纯长寿系列。情绪美容国内首部T/SHRH068-2024标准发布，β-内啡肽/皮质醇成原料巨头布局重点。</p>
+<div class="src">来源：T/SHRH068-2024 / 美妆行业观察</div>
+</div>
+<div class="cc b">
+<h3>熬夜护肤：2025年48.70亿元，同比+24.17%</h3>
+<p>预计2026年53.57亿元，持续增长。</p>
+<div class="src">来源：青眼情报</div>
+</div>
+<div class="cc g">
+<h3>全球防晒市场：2024年153.65亿美元→2030年212.28亿美元</h3>
+<p>中国防晒服市场2026年预计958亿元。婴童防晒CAGR约18%，养肤型防晒CAGR约25%。</p>
+<div class="src">来源：青眼情报2026防晒趋势白皮书</div>
+</div>
+</div>
+
+<!-- 竞品动态面板 -->
+<div id="competitor-view" class="panel">
+<div class="cc r">
+<h3>防晒赛道竞品：6大品牌快速起量</h3>
+<p><strong>安热沙</strong>：国际大牌+线下渠道（5000+门店）入局儿童防晒；<strong>MISTINE</strong>：AI线粒体抗光损+王楚钦全球首席防晒代言人；<strong>贝德美</strong>：高浓度蓝甘菊+德国专利，100-200元价格带直接竞争；<strong>润本</strong>：Q1亮眼+防晒气垫/日霜新品卡位夏季；<strong>袋鼠妈妈</strong>：天猫婴童防晒多品牌，"无添加"温和路线；<strong>一页</strong>：上线7个月超千万，2025年超10亿，快速起量。</p>
+<div class="src">来源：各品牌官方 / 魔镜洞察 / 任拓 / 2026.04-07</div>
+</div>
+<div class="cc b">
+<h3>青少年护肤竞品：5大品牌入局，窗口期缩小</h3>
+<p><strong>海龟爸爸</strong>：已抢占"标准制定者"身份，定义品类话语权；<strong>袋鼠妈妈</strong>：传统优势领域，青少年护理线扩展；<strong>青青有口/青椰/青萌</strong>：新锐品牌纷纷入局，"以酶抗痘"成技术趋势；<strong>青蛇王子</strong>：国货老牌回归，经典品牌信任优势。窗口期正在缩小，需加速产品线拓展。</p>
+<div class="src">来源：青眼情报 / 海龟爸爸SGS报告 / 各品牌官方 / 2026.04-07</div>
+</div>
+<div class="cc g">
+<h3>婴童护肤竞品：6大品牌占据市场</h3>
+<p><strong>戴可思</strong>：3.74亿领跑天猫婴童护肤（7.8%），"成分党"+第三方测评；<strong>一页</strong>：上线7个月超千万，2025年超10亿，专注新生儿市场；<strong>丝塔芙</strong>：百年品牌下沉儿童线，医学级认可；<strong>顺峰儿童</strong>：华润三九旗下，医药背景强信任；<strong>安唯伊</strong>：CIC双认证，胎脂科技占据高端；<strong>薇诺娜宝贝</strong>：贝泰妮旗下，儿童敏感肌修护直接竞争。</p>
+<div class="src">来源：魔镜洞察 / 天猫榜单 / CIC灼识 / 各品牌官方 / 2026.04-07</div>
+</div>
+<div class="cc o">
+<h3>跨界品牌：moodytiger/Babycare/幼岚/薄荷健康跨界入局</h3>
+<p><strong>moodytiger</strong>：防晒服订单+142%，将防晒场景与亲子运动深度绑定，服饰品牌跨界入局；<strong>Babycare</strong>：婴童用品头部拓展护肤线，渠道+品类优势快速抢占；<strong>幼岚</strong>：国风服饰品牌探索护肤防晒，原有粉丝基础支撑；<strong>薄荷健康</strong>：澳洲天然护肤，强调"吃得进的护肤品"，高端婴童护肤竞争。</p>
+<div class="src">来源：艾瑞咨询 / 蝉魔方 / 各品牌官方 / 2026.04-07</div>
+</div>
+</div>
+
+<!-- 营销案例面板 -->
+<div id="case-view" class="panel">
+<div class="cc b">
+<h3>京东：听劝式营销（猪猪侠联名+惠英红代言）</h3>
+<p>APP下载量环比+156%；将UGC反馈转化为官方动作，用"听劝"人设拉近品牌与用户距离。</p>
+<div class="src">来源：京东官方 / 2026.06</div>
+</div>
+<div class="cc g">
+<h3>伊利："马年找马伊琍"听劝叠加创意</h3>
+<p>先官宣马思纯推出"马年思念纯牛奶"，继而策划"寻找马伊琍"广告片。</p>
+<div class="src">来源：伊利官方 / 2026.06</div>
+</div>
+<div class="cc o">
+<h3>超能：官宣肖战为全球品牌代言人</h3>
+<p>家清赛道"三顶配"组合，覆盖三叶草/三条纹/Y3全产品线。</p>
+<div class="src">来源：超能官方 / 2026.06</div>
+</div>
+<div class="cc r">
+<h3>红之：×王源二度合作升级</h3>
+<p>从卸妆拓展至面部清洁全品类，全周期代言运营（预热→官宣→共创→长线）。</p>
+<div class="src">来源：红之官方 / 2026.06</div>
+</div>
+<div class="cc p">
+<h3>MISTINE：第七代AI线粒体抗光损科技</h3>
+<p>续约王楚钦升级"全球首席防晒代言人"，AI从营销工具升级为产品核心。</p>
+<div class="src">来源：MISTINE官方 / 2026.06</div>
+</div>
+<div class="cc b">
+<h3>理肤泉：联名《小黄人与大怪兽》全球跨界合作</h3>
+<p>2026年7月初，理肤泉与《小黄人与大怪兽》联名，全球跨界合作。</p>
+<div class="src">来源：理肤泉官方 / 2026.07</div>
+</div>
+</div>
+
+<!-- 艺人代言面板 -->
+<div id="celebrity-view" class="panel">
+<div class="cc r">
+<h3>体育明星代言美妆：孙颖莎/王楚钦/樊振东</h3>
+<p>孙颖莎×半亩花田、王楚钦×优时颜/MISTINE（全球首席防晒代言人）、樊振东×康如、孙颖莎×妮维雅。运动员"安全性""专业形象""国民影响力"高度契合品牌需求。婴童赛道尚未出现体育明星代言案例，存在先发占位机会。</p>
+<div class="src">来源：各品牌官方 / 2026.04-07</div>
+</div>
+<div class="cc b">
+<h3>赵露思：开年6项全球代言，领跑95花</h3>
+<p>2026年开年已拿下6项全球代言，持续领跑95花代言数量。</p>
+<div class="src">来源：品牌官方 / 2026.04-07</div>
+</div>
+<div class="cc g">
+<h3>单依纯：40天双奢进阶（香奈儿+蔻驰）</h3>
+<p>香奈儿品牌史上首位00后华人歌手代言人。</p>
+<div class="src">来源：品牌官方 / 2026.04-07</div>
+</div>
+<div class="cc o">
+<h3>王鹤棣：阿迪达斯全系代言人</h3>
+<p>品牌罕见全品类高规格代言。</p>
+<div class="src">来源：adidas官方 / 2026.04-07</div>
+</div>
+<div class="cc p">
+<h3>白鹿：11个月升任Jimmy Choo全球代言人</h3>
+<p>大中华区销售额增34%；娜扎水之蔻；杨紫草本初色全球代言人。</p>
+<div class="src">来源：品牌官方 / 2026.04-07</div>
+</div>
+<div class="cc b">
+<h3>赵丽颖：纪梵希全球彩妆及香氛双线代言人</h3>
+<p>2026年7月6日发布纪梵希全新G方管广告大片（2026年1月已官宣全球代言人），首位华人。</p>
+<div class="src">来源：纪梵希官方 / 2026.07</div>
+</div>
+</div>
+
+<!-- 平台趋势面板 -->
+<div id="platform-view" class="panel">
+<div class="cc b">
+<h3>小红书：Redshop跨境电商平台6月上线</h3>
+<p>05后消费链路从"搜索先行"→"内容种草→验证→下单"。信任机制从"信达人"转向"信真实反馈"。广东315晚会曝光假货产业链（AKF/橘朵/酵色发布打假声明）。</p>
+<div class="src">来源：小红书 / 315晚会 / 2026.06</div>
+</div>
+<div class="cc g">
+<h3>抖音：5月化妆品GMV 284.58亿元</h3>
+<p>赫莲娜登顶TOP1，白牌消失于TOP20。618美容品牌破亿数量同比增长75%。</p>
+<div class="src">来源：抖音 / 蝉魔方 / 2026.05-06</div>
+</div>
+<div class="cc o">
+<h3>天猫：618化妆品首次纳入政府补贴（12%-20%）</h3>
+<p>李佳琦直播间54款单品GMV破千万，珀莱雅19条链接居国货第一。</p>
+<div class="src">来源：天猫 / 2026.06</div>
+</div>
+<div class="cc r">
+<h3>京东：618母婴布局+即时零售</h3>
+<p>5月20日开启预售，6.1儿童节专属优惠。</p>
+<div class="src">来源：京东 / 2026.06</div>
+</div>
+<div class="cc p">
+<h3>Ulta Beauty：Q1 2026净销售额31.64亿美元（+11.1%）</h3>
+<p>花西子2025年10月入驻（首个中国品牌），花知晓登陆ULTA官网。</p>
+<div class="src">来源：Ulta Beauty / 2026.05</div>
+</div>
+</div>
+
+<!-- 政策监管面板 -->
+<div id="policy-view" class="panel">
+<div class="cc r">
+<h3>国家药监局：5月通报44批次不合格化妆品</h3>
+<p>4月通报25批次检出禁用原料；防晒类问题占比47.5%（19批次/40批次）；"小金盾"成婴童防晒硬指标。</p>
+<div class="src">来源：国家药监局 / 2026.05</div>
+</div>
+<div class="cc g">
+<h3>财政部：2026年育儿补贴999亿元（同比+10.6%）</h3>
+<p>利好母婴基本盘。</p>
+<div class="src">来源：财政部 / 2026.06</div>
+</div>
+<div class="cc o">
+<h3>小红书假货：广东315晚会曝光完整造假链条</h3>
+<p>高仿生产→回收瓶罐装→伪造保税仓发货，海蓝之谜价差超19倍。</p>
+<div class="src">来源：315晚会 / 2026.03</div>
+</div>
+<div class="cc b">
+<h3>化妆品合规：262批次爆雷，防晒品类问题突出</h3>
+<p>合规品牌需主动公示检测报告。</p>
+<div class="src">来源：国家药监局 / 2026.04-07</div>
+</div>
+</div>
+
+<!-- 资本市场面板 -->
+<div id="capital-view" class="panel">
+<div class="cc b">
+<h3>若羽臣：2.99亿元全资收购奥伦纳素</h3>
+<p>1927年纽约高端护肤品牌，梦露/赫本曾青睐。</p>
+<div class="src">来源：若羽臣 / 2026.06</div>
+</div>
+<div class="cc g">
+<h3>百瑞吉：Q1营收9102万元（+26%）</h3>
+<p>重组胶原蛋白原料持续放量。</p>
+<div class="src">来源：百瑞吉 / 2026.04</div>
+</div>
+<div class="cc o">
+<h3>汉高：7月7日完成收购OLAPLEX（14亿美元）</h3>
+<p>护发品牌收购。</p>
+<div class="src">来源：汉高 / 2026.07</div>
+</div>
+<div class="cc r">
+<h3>屈臣氏：7月6日确认拟出售Marionnaud</h3>
+<p>资产出售。</p>
+<div class="src">来源：屈臣氏 / 2026.07</div>
+</div>
+<div class="cc p">
+<h3>利洁时：7月8日启用上海全球科创研发中心（投资超3亿元）</h3>
+<p>研发投资。</p>
+<div class="src">来源：利洁时 / 2026.07</div>
+</div>
+<div class="cc b">
+<h3>美妆资本市场："9退30进"，资本从流量转向科技</h3>
+<p>Ulta Beauty Q1净销售额31.64亿美元（+11.1%）。国货份额提升但高端市场仍由外资主导。</p>
+<div class="src">来源：行业分析 / 2026.04-07</div>
+</div>
+</div>
+
+<!-- 海外市场面板 -->
+<div id="overseas-view" class="panel">
+<div class="cc b">
+<h3>国货出海动态：花西子/花知晓/FAN BEAUTY/橘朵/酵色/自然堂</h3>
+<p><strong>北美</strong>：花西子2025年10月入驻Ulta Beauty（首个中国品牌），花知晓登陆ULTA官网。需先通过DTC+TikTok Shop验证产品匹配度，再进入线下渠道。</p>
+<p><strong>东南亚</strong>：FAN BEAUTY入驻新加坡屈臣氏超百家门店，橘朵/酵色新加坡首店，自然堂入驻日本成田机场免税渠道。</p>
+<div class="src">来源：蓝鲸财经 / 界面新闻 / 各品牌官方 / 2026.01-04</div>
+</div>
+<div class="cc p">
+<h3>K-Beauty全球爆发：134.3亿美元→300.9亿美元（CAGR 8.4%）</h3>
+<p><strong>2026六大趋势</strong>：(1)生物技术主干（发酵神经酰胺/PDRN/外泌体）；(2)外泌体护肤全球普及；(3)AI美容定制（皮肤扫描+实时配方）；(4)屏障优先成全球规则；(5)无水化/可持续创新；(6)极简主义2.0（10步→3-5步多效）。</p>
+<p><strong>启示</strong>："屏障优先"和"生物技术"路线与海龟爸爸"抗敏感"和"科研实力"高度契合。可借鉴"少步多效"思路，降低家长使用门槛。</p>
+<div class="src">来源：Expert Market Research / IMARC / 2026.01-06</div>
+</div>
+<div class="cc g">
+<h3>J-Beauty复兴：极简护肤+发酵成分+屏障修复</h3>
+<p>J-Beauty以"精确应用+传统+温和配方"著称，强调层层叠加保湿、面部按摩技法、预防性护肤。代表品牌Shiseido/Tatcha/SK-II/Curel/Takami带动全球兴趣。</p>
+<p><strong>启示</strong>：借鉴"极简主义+长期修复"理念，把儿童抗光损修复从多步简化为精简多效，强调日常护理而非急救修复。</p>
+<div class="src">来源：Vexx Skincare / IMARC / 2026.04</div>
+</div>
+<div class="cc o">
+<h3>全球儿童护肤市场：欧莱雅/雀巢/强生/Himalaya布局</h3>
+<p>全球TOP10儿童化妆品公司：欧莱雅（法国）434.8亿欧元；雀巢（瑞士）914亿瑞士法郎；强生（美国）42亿美元；Himalaya（印度）16亿美元，CAGR 9.2%，100+国家。</p>
+<p><strong>东南亚出口策略</strong>：RCEP分三阶段——Phase 1进入东盟（天然成分+竞争性价格）；Phase 2开发美欧高端（皮肤科学家测试+FDA合规）；Phase 3扩展至柬埔寨/孟加拉等新兴市场。分阶扩展收入增长率高出42%，利润率高出28%。</p>
+<p><strong>启示</strong>：已获"亚洲第一儿童防晒"认证，建议Q3前入驻东南亚，长期以日韩为第二曲线，北美准备FDA+USDA Organic/ECOCERT认证。</p>
+<div class="src">来源：Market Research Future / Alibaba Seller / IMARC / 2026.02-06</div>
+</div>
+</div>
+
+<!-- 核心洞察详细分析（前移到行业动态之后） -->
+<div class="section">
+<div class="sec-title"><span class="ic">📊</span>核心洞察详细分析</div>
+<div class="cc b">
+<h3>防晒赛道：从增长转向结构性分化</h3>
+<p>2026年Q1防晒销售额28.47亿元（同比-9.5%），但喷雾逆势+40.6%成第二曲线。儿童防晒+40.2%领跑，运动服+74.1%、女装+64%为核心增长极。4月+19%突破40亿元。100-200元价格带占66%是利润核心。防晒棒在韩国份额突破6%，中国新兴品类（当期6.2万元）。</p>
+<div class="src">来源：魔镜洞察 / 任拓 / 2026.Q1-4月</div>
+</div>
+<div class="cc g">
+<h3>青少年护肤：先入局者定义标准</h3>
+<p>海龟爸爸已抢占"标准制定者"身份（全国首个青少年祛痘团标），SGS检测28天痘痘-54.83%、闭口-67.96%。但椿草/玉泽/悦芙媞/袋鼠妈妈纷纷入局，窗口期正在缩小。</p>
+<div class="src">来源：青眼情报 / 海龟爸爸SGS报告 / 2026.05</div>
+</div>
+<div class="cc o">
+<h3>AI赋能：从营销噱头到产品研发核心驱动力</h3>
+<p>MISTINE/资生堂/欧莱雅已将AI升级为产品研发核心驱动力。海龟爸爸"羲和实验室"需与AI技术叙事结合，否则在"AI防晒"话语竞争中处于被动。</p>
+<div class="src">来源：MISTINE / 资生堂 / 欧莱雅 / 2026.06</div>
+</div>
+<div class="cc r">
+<h3>体育明星代言：从个案到行业标配</h3>
+<p>近3月20+位艺人代言中，6位为体育明星。但婴童赛道尚未出现体育明星代言案例，存在先发占位机会。建议评估儿科医生/奥运双背书组合。</p>
+<div class="src">来源：品牌官方监测 / 2026.04-07</div>
+</div>
+</div>
+
+<!-- 数据可视化（用简单表格代替CSS图表） -->
+<div class="section">
+<div class="sec-title"><span class="ic">📊</span>核心数据可视化</div>
+
+<h3 style="font-size:14px;margin-bottom:10px">品类热度排行</h3>
+<table class="data-table">
+<tr><th>品类</th><th>增速</th><th>关键指标</th></tr>
+<tr><td>青少年护肤</td><td><strong style="color:#059669">+445%</strong></td><td>05后5691万人</td></tr>
+<tr><td>AI防晒</td><td><strong style="color:#8b5cf6">爆发期</strong></td><td>MISTINE/资生堂布局</td></tr>
+<tr><td>无水美妆</td><td><strong style="color:#059669">CAGR 46%</strong></td><td>65.8亿→205.63亿</td></tr>
+<tr><td>儿童防晒</td><td><strong style="color:#059669">+40.2%</strong></td><td>Q1领跑</td></tr>
+<tr><td>防晒喷雾</td><td><strong style="color:#059669">+40.6%</strong></td><td>第二曲线</td></tr>
+<tr><td>春季防晒Q1</td><td><strong style="color:#dc2626">-9.5%</strong></td><td>结构调整期</td></tr>
+</table>
+
+<h3 style="font-size:14px;margin:16px 0 10px">防晒市场份额（估算）</h3>
+<table class="data-table">
+<tr><th>品牌</th><th>份额</th><th>定位</th></tr>
+<tr><td>TOP5品牌合计</td><td>36.5%</td><td>市场集中度</td></tr>
+<tr><td>海龟爸爸</td><td>15.2%</td><td>婴童防晒第一</td></tr>
+<tr><td>安热沙</td><td>8.5%</td><td>国际大牌</td></tr>
+<tr><td>MISTINE</td><td>5.3%</td><td>AI防晒</td></tr>
+<tr><td>戴可思</td><td>4.8%</td><td>成分党</td></tr>
+<tr><td>润本</td><td>2.9%</td><td>性价比</td></tr>
+<tr><td>其他</td><td>63.5%</td><td>长尾市场</td></tr>
+</table>
+
+<h3 style="font-size:14px;margin:16px 0 10px">竞品综合实力对比</h3>
+<table class="data-table">
+<tr><th>维度</th><th>海龟爸爸</th><th>安热沙</th><th>MISTINE</th></tr>
+<tr><td>科研实力</td><td>95</td><td>90</td><td>88</td></tr>
+<tr><td>品牌声量</td><td>85</td><td>98</td><td>92</td></tr>
+<tr><td>渠道覆盖</td><td>75</td><td>95</td><td>80</td></tr>
+<tr><td>产品创新</td><td>90</td><td>75</td><td>85</td></tr>
+<tr><td>价格竞争力</td><td>70</td><td>55</td><td>75</td></tr>
+<tr><td>用户口碑</td><td>88</td><td>85</td><td>82</td></tr>
+</table>
+
+<h3 style="font-size:14px;margin:16px 0 10px">平台消费规模与增速</h3>
+<table class="data-table">
+<tr><th>平台</th><th>消费规模(亿)</th><th>增速</th></tr>
+<tr><td>小红书</td><td>284.58</td><td><strong style="color:#059669">+35%</strong></td></tr>
+<tr><td>抖音</td><td>284.58</td><td><strong style="color:#059669">+42%</strong></td></tr>
+<tr><td>天猫</td><td>150</td><td><strong style="color:#059669">+18%</strong></td></tr>
+<tr><td>京东</td><td>80</td><td><strong style="color:#059669">+25%</strong></td></tr>
+<tr><td>微博</td><td>45</td><td><strong style="color:#059669">+12%</strong></td></tr>
+</table>
+
+<h3 style="font-size:14px;margin:16px 0 10px">婴童防晒增速趋势（1-6月）</h3>
+<ul class="data-list">
+<li>1月：儿童防晒+25% | 防晒喷雾+20% | 防晒服+60%</li>
+<li>2月：儿童防晒+30% | 防晒喷雾+25% | 防晒服+65%</li>
+<li>3月：儿童防晒+35% | 防晒喷雾+32% | 防晒服+70%</li>
+<li>4月：儿童防晒+40.2% | 防晒喷雾+40.6% | 防晒服+74.1%</li>
+<li>5月：儿童防晒+38% | 防晒喷雾+45% | 防晒服+80%</li>
+<li>6月：儿童防晒+42% | 防晒喷雾+48% | 防晒服+85%</li>
+</ul>
+</div>
+
+<!-- 时间线 -->
+<div class="section">
+<div class="sec-title"><span class="ic">📅</span>品牌前沿资讯时间线</div>
+<div class="timeline">
+<div class="tl-item">
+<div class="tl-card">
+<div class="tl-date"><span class="dt">2026.07.06-08</span><span class="tl-tag">资本</span></div>
+<div class="tl-title">汉高完成收购OLAPLEX / 利洁时启用上海科创中心</div>
+<div class="tl-summary">汉高14亿美元收购护发品牌OLAPLEX；利洁时投资超3亿元启用上海全球科创研发中心</div>
+<div class="tl-tags"><span class="tg tg-cap">资本</span><span class="tg tg-ind">行业</span></div>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-card">
+<div class="tl-date"><span class="dt">2026.07.02-05</span><span class="tl-tag">代言</span></div>
+<div class="tl-title">赵丽颖升级纪梵希双线代言人 / 美康粉黛×陈立农</div>
+<div class="tl-summary">赵丽颖成为纪梵希全球彩妆及香氛双线代言人（首位华人）；美康粉黛官宣陈立农</div>
+<div class="tl-tags"><span class="tg tg-end">代言</span><span class="tg tg-mark">营销</span></div>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-card">
+<div class="tl-date"><span class="dt">2026.06.24</span><span class="tl-tag">行业</span></div>
+<div class="tl-title">上海静安全球顶级美妆IP首登中国 / 05后美妆消费621亿元</div>
+<div class="tl-summary">上海静安全球顶级美妆IP首展；05后美妆消费市场规模达621亿元</div>
+<div class="tl-tags"><span class="tg tg-ind">行业</span><span class="tg tg-plat">平台</span></div>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-card">
+<div class="tl-date"><span class="dt">2026.06.20</span><span class="tl-tag">政策</span></div>
+<div class="tl-title">防晒零售额274.5亿元 / 体育明星成美妆代言新顶流</div>
+<div class="tl-summary">防晒零售额274.5亿元（同比降7.8%）；蜜丝婷×王楚钦/妮维雅×孙颖莎</div>
+<div class="tl-tags"><span class="tg tg-pol">政策</span><span class="tg tg-end">代言</span></div>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-card">
+<div class="tl-date"><span class="dt">2026.06.18</span><span class="tl-tag">营销</span></div>
+<div class="tl-title">618收官：防晒底妆增长超5倍 / AI赋能防晒</div>
+<div class="tl-summary">618防晒底妆品类增长超5倍；MISTINE/资生堂AI防晒技术</div>
+<div class="tl-tags"><span class="tg tg-mark">营销</span><span class="tg tg-ind">行业</span></div>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-card">
+<div class="tl-date"><span class="dt">2026.06.05</span><span class="tl-tag">行业</span></div>
+<div class="tl-title">高端美妆杀回抖音 / 防晒经济升温</div>
+<div class="tl-summary">赫莲娜登顶抖音美妆TOP1；海龟爸爸小蓝瓶SGS数据领先</div>
+<div class="tl-tags"><span class="tg tg-ind">行业</span><span class="tg tg-plat">平台</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+数据来源：青眼情报 / 界面新闻 / 财新网 / 国家药监局 / 魔镜洞察 / 任拓 / 艾瑞咨询 / 蝉魔方 / 品牌官方 / 社交媒体监测<br>
+维护者：品牌小龙虾 + Kimi | 最后更新：2026年7月13日
+</div>
+</div>
+
+<script>
+function showView(viewId) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('a'));
+    document.getElementById(viewId + '-view').classList.add('a');
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('a'));
+    event.target.classList.add('a');
+}
+</script>
+</body>
+</html>
